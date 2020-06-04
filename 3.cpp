@@ -1,18 +1,13 @@
-// #include<bits/stdc++.h> 
-//function to convert string into lowercase
+#include<bits/stdc++.h> //function to convert string into lowercase                           
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
 
 class Solution {
 public:
    
-    struct cell{
-        char c;
-        int index;
-    };
-   
-    int char_to_index(char c){
-        // 'a' is 97, whole string will be converted into lowercase str.
-        return int(c) - 97;
-    }
     
     
     string toLower(string str){
@@ -21,61 +16,60 @@ public:
     }
     
     
-    vector<string> RecursiveSub ( string s, vector<cell> & hashTable, vector<string> & string_vec)
-    {   
-        
-        for(int i = 0; i  <  s.size(); i++)
-        {
-            int index = char_to_index(s[i]);
-            string temp = "";
-            if(hashTable[index]==NULL)
-            {
-                temp = temp + s[i];
-                hashTable[index] = s[i];
-            }
-            
-            else{
-                
-                // there is a collision
-                //  assume string is "123454........N"
-                // push_back 12345 to string_vector
-                // go on with 54........N,   (cut the string)
-                
-                
-                string sub_str = s.substr(i, s.size()- i);
-                
-                string_vec.push_back(  s.substr(0,i-1)  );  //  123454........N
-                
-                // now clear 12345 from hashTable    
-                for(int k = 0; k<i;  k++){
-                    index = char_to_index(s[k]);
-                    hashTable[index] = NULL;
-                }
-                
-                
-                return RecursiveSub(sub_str,hashTable,string_vec);
-            }
-        }
-        
-        // if there left a string without collision we should add it to string_vec
-        if(temp.size>0) {   string_vec.push_back(temp);     }
-        
-        return string_vec;
-        
-    }
     
    
     int lengthOfLongestSubstring(string s)
     {
-        vector<string> string_vec;
-        vector<char> hashTable(30);
-        
-        s = toLower(s); // converted to lowercase string
-      
-        string_vec =  RecursiveSub(s,hashTable,string_vec);
-    
+        if(s.length()<=1){return s.length();}
         
         
-        return 0;
+	    // a char can hold up to 256 values, we map each char value to a "seen" flag
+		// the state of a substring is represented by seenChars and count
+        vector<bool> hashArray(256);
+        int count = 0, maxCount = 0, start = 0;
+        
+        for(int i = 0; i < s.size(); i++) {
+            if(hashArray[s[i]]) {
+			
+			   // advance start to the left duplicate character
+                int j = start;
+                for(; s[j] != s[i]; j++) {
+				    // remove intermediate characters from state
+                    hashArray[s[j]] = false;
+                    count--;
+                }
+				
+				// j points to the duplicate character, so advance once
+                start = j + 1;
+            } else {
+                count++;
+                if(count > maxCount) {
+                    maxCount = count;
+                }
+            }
+            
+            hashArray[s[i]] = true;
+        }
+        
+        return maxCount;
     }
+		
+        
+    
 };
+
+
+
+int main()
+{
+        
+	Solution s;
+	
+	string temp = "abcabcbb";
+	temp = s.toLower(temp);
+	return s.lengthOfLongestSubstring(temp);
+		
+		
+		
+    
+}
