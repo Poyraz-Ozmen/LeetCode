@@ -63,8 +63,7 @@ public:
                         else if(j==1){
                             longest_cp = longest_cp[0];
                             j = size; // break inner loop
-                        }
-                        
+                        }                        
                         else{
                             cout<<"There is a bug  in here for test  ["apcb","apb"]";
                             cout<<longest_cp<<endl;
