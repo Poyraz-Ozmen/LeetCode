@@ -3,37 +3,85 @@
 #include <vector>
 using namespace std;
 
-class Solution() {
+class Solution {
 public:
+    
+
+    
     string longestCommonPrefix(vector<string>& strs) {
         
-        string longest_cp = "";
-        int shortest_str;
+        if(strs.size()==0) {return "";}
+        else if (strs.size()==1){return strs[0];}
         
-        if(strs[0].size()<=strs[1].size()){
-            shortest_str = strs[0].size(); 
-        }
-        else{shortest_str =strs[1].size();}
         
-        for(int i = 0; i<shortest_str; i++ ){
+        string longest_cp = strs[0];
+        int j;
+        int k;
+        int t = 0;
+        int size;
+        
+        for(int i = 0; i<strs.size(); i++)
+        {   
+            if(strs[i].size()==0){return "";}
             
-            if(strs[0].at(i)==strs[1].at(i)){
-                longest_cp += strs[0].at(i);
-            }
-            else{break;}
-        }
-        
-        if(strs.size()>=2){
-            for(int k=2; k<strs.size();k++){
-                for(int j=0; j<longest_cp.size() and j<strs[k].size(); j++){
-
-                    if(strs[k].at(j) != longest_cp.at(j)){
-                        longest_cp =  longest_cp.substr(0,j);
-                        break;
-                    }
+            if(strs[i].size()==1){
+                if(strs[i].at(0)==longest_cp[0])
+                {
+                    longest_cp = longest_cp[0];
+                }
+                else{
+                    return "";
                 }
             }
+           
+            
+            if(strs[i].size() < longest_cp.size())
+            { 
+                size = strs[i].size();
+                if(longest_cp.substr (0,size) == strs[i])
+                {
+                    longest_cp = strs[i];
+                }
+            }
+            
+            else{size = longest_cp.size();}
+             
+            
+            for(j = 0; j<size; j++ )
+            {
+        
+                if(longest_cp.size() == 0){return longest_cp;}
+                
+                else
+                {    
+                    if(longest_cp[j] != strs[i].at(j))
+                    {
+                        if(j==0){
+                            return "";
+                        }
+                        
+                        else if(j==1){
+                            longest_cp = longest_cp[0];
+                            j = size; // break inner loop
+                        }
+                        
+                        else{
+                            cout<<"There is a bug  in here for test  ["apcb","apb"]";
+                            cout<<longest_cp<<endl;
+                            longest_cp.pop_back();
+                            cout<<longest_cp<<endl;
+                            cout<<endl<<endl;
+                        }
+                    }
+                }
+                
+                
+            }
+            if(longest_cp.size()>strs[i].size()){
+                longest_cp.pop_back();
+            }
         }
+        
         
         
         return longest_cp;
